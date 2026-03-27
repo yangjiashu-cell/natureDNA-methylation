@@ -1,0 +1,16 @@
+
+Operator analysis
+Operator                                          Tuning   Count      Time     Time/Op  Pr(accept) 
+scale(clock.rate)                                 0.704   32862      208      0.01     0.2324      
+scale(biallelicBinary.demethylation)              0.553   816        46       0.06     0.2267      
+scale(biallelicBinary.homozygousMethylation)      0.553   831        36       0.04     0.2335      
+scale(biallelicBinary.homozygousDemethylation)    0.571   811        35       0.04     0.233       
+subtreeSlide(treeModel)                           1.349   49804      238      0.0      0.2327      
+Narrow Exchange(treeModel)                                49587      116      0.0      0.0         
+Wide Exchange(treeModel)                                  9741       17       0.0      0.0         
+wilsonBalding(treeModel)                                  10063      26       0.0      0.0         
+scale(treeModel.rootHeight)                       0.952   16477      49       0.0      0.2362      
+uniform(nodeHeights(treeModel))                           99501      635      0.01     0.2774      
+scale(constant.popSize)                           0.144   9998       18       0.0      0.237       
+up:clock.rate down:nodeHeights(treeModel)         0.951   16509      66       0.0      0.2341      
+

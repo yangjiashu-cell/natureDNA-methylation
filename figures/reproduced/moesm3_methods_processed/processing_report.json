@@ -1,0 +1,73 @@
+{
+  "moesm3_path": "D:\\naturedna\\evoflux-reproduce\\evoflux\\41586_2025_9374_MOESM3_ESM.xlsx",
+  "outputs": {
+    "supplementary_table_2": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step1_2_sample_metadata.csv",
+    "supplementary_table_3": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step1_2_qc_deconv.csv",
+    "supplementary_table_4": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step3_fcpg_annotation.csv",
+    "supplementary_table_5": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step3_fcpg_beta_2204.csv",
+    "supplementary_table_6": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step4_cna_cll.csv",
+    "supplementary_table_7": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step4_cna_mcl.csv",
+    "supplementary_table_12": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step10_11_evoflux_inference.csv",
+    "supplementary_table_18": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\step12_longitudinal_rt_samples.csv",
+    "derived_step10_11_inference_with_metadata": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\derived_step10_11_inference_with_metadata.csv",
+    "derived_step3_fcpg_beta_matrix": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\derived_step3_fcpg_beta_matrix.csv",
+    "derived_step12_pisca_samples_beta": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\moesm3_methods_processed\\derived_step12_pisca_samples_beta.csv"
+  },
+  "checks": {
+    "supplementary_table_2_shape": [
+      2204,
+      37
+    ],
+    "supplementary_table_3_shape": [
+      2204,
+      31
+    ],
+    "supplementary_table_4_shape": [
+      978,
+      26
+    ],
+    "supplementary_table_5_shape": [
+      978,
+      2205
+    ],
+    "supplementary_table_6_shape": [
+      978,
+      246
+    ],
+    "supplementary_table_7_shape": [
+      978,
+      62
+    ],
+    "supplementary_table_12_shape": [
+      1976,
+      67
+    ],
+    "supplementary_table_18_shape": [
+      17,
+      31
+    ],
+    "derived_step10_11_inference_with_metadata_shape": [
+      1976,
+      78
+    ],
+    "derived_step3_fcpg_beta_matrix": {
+      "rows": 978,
+      "cols": 2204,
+      "reference_rows": 978,
+      "reference_cols": 2204,
+      "common_rows": 978,
+      "common_cols": 2204,
+      "max_abs_diff_vs_reference": 4.999999997368221e-10,
+      "mean_abs_diff_vs_reference": 2.49985607479779e-10
+    },
+    "derived_step12_pisca_samples_beta_shape": [
+      978,
+      9
+    ]
+  },
+  "notes": [
+    "Tables are extracted from MOESM3 using header row index 2.",
+    "The fCpG beta matrix is compared against data/beta_fcpgs.csv when available.",
+    "Derived PISCA sample matrix is included for longitudinal phylogenetic workflows."
+  ]
+}

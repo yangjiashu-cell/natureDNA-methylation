@@ -1,0 +1,5 @@
+# BEAST v1.10.4 Prerelease #bc6cbd9
+# Generated Fri Mar 27 16:16:44 CST 2026 [seed=1774599403817]
+# -overwrite -java D:\naturedna\evoflux-reproduce\figures\reproduced\snv_beast10_prep\snv_case12_case19_beast10_hky_proxy.xml
+state	posterior	prior	likelihood	hky.kappa	clock.rate	treeModel.rootHeight	constant.popSize	hky.frequencies1	hky.frequencies2	hky.frequencies3	hky.frequencies4
+0	0.0	0.0	0.0	2.0	1.0	19.2913882615134	1.0	0.4900000001	0.0100000001	0.4899999999	0.0099999999

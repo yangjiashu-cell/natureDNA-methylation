@@ -1,0 +1,6 @@
+所有 sheet 名称： ['Figure 2a', 'Figure 2b', 'Figure 2c', 'Figure 2d', 'Figure 2e']
+Sheet 'Figure 2a' 前5列名： [0.898474945110262]
+Sheet 'Figure 2b' 前5列名： ['recent_mrca', 'distant_mrca']
+Sheet 'Figure 2c' 前5列名： ['high_growth', 'low_growth']
+Sheet 'Figure 2d' 前5列名： ['Figure 2d - Top', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Figure 2d - Bottom', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7']
+Sheet 'Figure 2e' 前5列名： ['Figure 2e - Left', 'Unnamed: 1', 'Unnamed: 2', 'Figure 2e - Right', 'Unnamed: 4', 'Unnamed: 5']

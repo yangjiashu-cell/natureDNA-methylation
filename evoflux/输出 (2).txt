@@ -1,0 +1,125 @@
+已重新完整回顾 `D:\naturedna\evoflux-reproduce\Duran-FerrerM-evoflux\docs`，并检查了 `D:\naturedna\evoflux-reproduce\evoflux` 下所有 `.xlsx`（MOESM3/5/6/7/8/9）。
+
+## 1) `docs` 所有文件做什么、对应 Methods 12 步中的哪一步（按步骤顺序）
+
+我按你们当前复现口径整理成 12 步主链（从上游到下游），并把 12 个 HTML 归位：
+
+1. **阵列 QC 与标准化**
+- `QC_DNAme_arrays.v.4.1.html`  
+  - 作用：IDAT/minfi 质量控制、过滤、标准化流程说明与代码快照。  
+  - 对应：**Step 1**
+
+2. **fCpG 筛选（方差/0.5/Laplacian）**
+- （`docs` 中没有单独 “fcpg_discovery” 的 HTML 文件）  
+  - 说明：该步核心代码在 `CalumGabbutt-evoflux/fcpg_discovery.ipynb`，`docs` 里主要是下游分析使用已筛 fCpG。  
+  - 对应：**Step 2（docs中缺主文件）**
+
+3. **fCpG 注释与表观时钟关联**
+- `fCpGs_epiclocks.html`  
+  - 作用：fCpG 与多种时钟/注释比较，支持“非传统时钟位点”叙述。  
+  - 对应：**Step 3**
+
+4. **遗传混杂排除（SNP/gnomAD/gaphunter）**
+- `Control_SNPs.html`
+- `SNPs_vs_fCpGs.html`  
+  - 作用：控制 SNP 探针对照、gnomAD 注释比较、gap hunting 等。  
+  - 对应：**Step 4**
+
+5. **纵向与遗传背景对照（Fig4AB/CNA 证据链）**
+- `Data_source_Fig.4AB.html`
+- `CNAs_plots.html`  
+  - 作用：纵向样本与遗传/CNA背景交叉验证。  
+  - 对应：**Step 5**
+
+6. **纳米孔正交验证**
+- `Nanopore.html`
+- `Nanopore_haplotypes.html`  
+  - 作用：long-read 甲基化与单倍型层面的验证。  
+  - 对应：**Step 6**
+
+7. **WGBS 正交验证**
+- `WGBS.html`  
+  - 作用：WGBS 与阵列/fCpG一致性补充验证。  
+  - 对应：**Step 7**
+
+8. **衰老相关验证（外部血液数据）**
+- `fCpGs_Aging.html`  
+  - 作用：fCpG 随年龄的均值/方差行为。  
+  - 对应：**Step 8**
+
+9. **RNA-seq 关联**
+- `Data_source_Fig.1G.html`  
+  - 作用：fCpG 相关基因表达分析（Fig1G）。  
+  - 对应：**Step 9**
+
+10. **临床/生存分析**
+- `Data_source_Fig.5.html`  
+  - 作用：临床结局与演化变量关联（Fig5）。  
+  - 对应：**Step 10**
+
+11. **EVOFLUx 推断主过程**
+- （`docs` 无独立 HTML 主实现）  
+  - 说明：核心在 `CalumGabbutt-evoflux/evoflux_notebook.ipynb` + Python 包。  
+  - 对应：**Step 11（docs中缺主文件）**
+
+12. **系统发育（PISCA/BEAST）与整合**
+- （`docs` 中无 PISCA 主流程文件）  
+  - 对应：**Step 12（由你们复现仓库脚本补齐）**
+
+---
+
+## 2) 检查 `evoflux` 下所有 xlsx，是否可用于这些 HTML 的数据
+
+你 `evoflux` 目录实际有 6 个 xlsx：
+- `41586_2025_9374_MOESM3_ESM.xlsx`（20 sheets，含 supplementary_table_2/5/6/7/18 等）
+- `MOESM5`（Fig1a-g）
+- `MOESM6`（Fig2a-e）
+- `MOESM7`（Fig3a-g）
+- `MOESM8`（Fig4a-d）
+- `MOESM9`（Fig5a-c）
+
+### 可替代性判断（针对 docs 里的关键 HTML）
+
+- **`Data_source_Fig.5.html`**  
+  - 需要 Fig5 数据源；`MOESM9` 有 `Figure 5a/5b/5c`  
+  - 结论：**可直接对应（高）**
+
+- **`Data_source_Fig.4AB.html`**  
+  - 需要纵向 Fig4 数据；`MOESM8` 有 `Figure 4a/4b`  
+  - 结论：**可对应（高）**
+
+- **`Data_source_Fig.1G.html`**  
+  - 需要 Fig1G 数据；`MOESM5` 有 `Figure 1g`  
+  - 结论：**可对应（高）**
+
+- **`CNAs_plots.html`**  
+  - 原 HTML 指向内部 `Revision/Data/CNAs/*.xlsx`  
+  - `MOESM3` 有 `supplementary_table_6`（CLL fCpG CNA）和 `supplementary_table_7`（MCL fCpG CNA）  
+  - 结论：**可部分替代（中高）**
+
+- **`Control_SNPs.html` / `SNPs_vs_fCpGs.html`**  
+  - 原 HTML 依赖 `beta_filtered_samples_fcpgs_laplacian.tsv`、`candidate_cpgs_24_07_23.txt`、`Supplementary_Tables_revision_curated.3.xlsx` 等  
+  - `MOESM3` 可提供 `supplementary_table_5`（fCpG beta）和部分 supplementary tables，但 **candidate_cpgs 文件不在 xlsx**  
+  - 结论：**部分可替代（中）**，仍缺关键背景候选集
+
+- **`Nanopore.html` / `Nanopore_haplotypes.html` / `WGBS.html`**  
+  - 依赖 Nanopore/WGBS 专用文件（beds/csv/RData/curated xlsx）  
+  - `evoflux` 的 MOESM xlsx 中没有这些原始/中间文件  
+  - 结论：**不可替代（低）**
+
+- **`fCpGs_Aging.html` / `fCpGs_epiclocks.html`**  
+  - 需要外部 GEO/时钟/内部 revision 文件  
+  - MOESM3 提供部分辅助表，但不足以完全复刻 HTML 原流程  
+  - 结论：**部分可替代（中）**
+
+---
+
+## 结论（你现在最关心的）
+
+- `evoflux` 里的 xlsx **确实能覆盖一大块 docs 工作流**，尤其 Fig1G/Fig4/Fig5 与部分 supplementary（CNA、fCpG beta、metadata）。  
+- 但对第四步里“遗传混杂整条链”（尤其 `SNPs_vs_fCpGs`、Nanopore、WGBS），**仍有关键依赖不在这些 xlsx 里**。  
+- 换句话说：  
+  - **图级复现与部分方法链可跑通**；  
+  - **完整原版 HTML 流程**仍需要 Revision/Results/Data 下的额外文件。  
+
+如果你愿意，我下一步可以直接给你一份“**基于现有 MOESM xlsx 的可执行替代版映射表**”（每个 HTML 对应哪张 MOESM 表、可跑到哪一步、还缺什么），这样你就可以按一条可执行路径继续推进而不是被原始路径卡住。

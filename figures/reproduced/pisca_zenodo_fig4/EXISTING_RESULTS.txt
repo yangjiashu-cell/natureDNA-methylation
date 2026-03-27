@@ -1,0 +1,28 @@
+Reuse policy — save time on long MCMC / Stan
+==============================================
+
+This directory already contains completed BEAST 1.8.4 + PISCA runs (local reproduction):
+
+  * fig4a_case12_zenodo.xml / .log / .trees / *_MCC.tree
+  * fig4b_case19_zenodo.xml / .log / .trees / *_MCC.tree
+
+Chain length in XML: 2_000_000 states (default script setting), logEvery 2000.
+This is NOT the paper-scale 100_000_000 generations; for publication-grade
+convergence use --paper-chain on a cluster and verify ESS in Tracer.
+
+Discretisation in these files (see *_states_*.csv alongside):
+  * GMM / beta_em / etc. depend on which run produced the CSV — check file names
+    (e.g. *_states_gmm.csv, *_states_beta_em.csv).
+  * Paper Methods target: Stan 3-state mixture → use run_fig4_pisca_paper_methods_pipeline.py
+    and replace outputs only when you need Methods-identical discretisation.
+
+Fast ggtree figures (no new BEAST):
+  Rscript scripts/plot_pisca_ggtree.R figures/reproduced/pisca_zenodo_fig4/fig4a_case12_zenodo_MCC.tree out.pdf
+
+Author / Zenodo: the harmonised beta matrix is from Zenodo (see Duran-FerrerM-evoflux README);
+phylogeny posteriors are not shipped as pre-made .trees on Zenodo — reuse files here instead
+of re-running when appropriate.
+
+Logic alignment (Nature 2025):
+  * Methylation phylogeny: PISCA + BEAST 1.8.x (PISCA plugin incompatible with BEAST 1.10).
+  * SNV phylogeny: separate BEAST 1.10 pipeline (see scripts/export_snv_beauti_nexus.py).

@@ -1,0 +1,28 @@
+{
+  "root": "D:\\naturedna\\evoflux-reproduce",
+  "beast": {
+    "beast_root_env": null,
+    "beast_root_found": "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.8.4",
+    "beast_jar_exists": true,
+    "beast_bin_exists": true
+  },
+  "pisca_plugin": {
+    "pisca_source_dir": "D:\\naturedna\\evoflux-reproduce\\PISCA",
+    "pisca_dist_jar_exists": false,
+    "pisca_dist_jar": "D:\\naturedna\\evoflux-reproduce\\PISCA\\dist\\PISCA.PISCALoader.jar",
+    "pisca_installed_plugin": "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.8.4\\lib\\plugins\\PISCA.PISCALoader.jar",
+    "java_in_path": true,
+    "jar_in_path": true,
+    "ant_in_path": true
+  },
+  "data": {
+    "fig4ab_source_expected": "D:\\naturedna\\evoflux-reproduce\\Revision\\Results\\Longitudinal_meth_data\\Data_source_methylation_Fig.4_SCLL12-SCLL19.xlsx",
+    "fig4ab_source_exists": false,
+    "moesm8_path": "D:\\naturedna\\evoflux-reproduce\\evoflux\\41586_2025_9374_MOESM8_ESM.xlsx",
+    "moesm8_exists": true
+  },
+  "required_actions": [
+    "补充作者 Fig4AB 原始输入：Revision/Results/Longitudinal_meth_data/Data_source_methylation_Fig.4_SCLL12-SCLL19.xlsx。",
+    "若无法提供上述文件，可先用 MOESM8 构建替代输入（可跑流程，但与论文 Data_source 口径有差异）。"
+  ]
+}

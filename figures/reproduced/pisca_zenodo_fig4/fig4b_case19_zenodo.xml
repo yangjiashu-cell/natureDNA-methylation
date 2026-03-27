@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='utf-8'?>
+<beast>
+<taxa id="taxa">
+	<taxon id="SCLL_493"><date value="69.806982" direction="forwards" units="years" /></taxon><taxon id="SCLL_494"><date value="75.211499" direction="forwards" units="years" /></taxon><taxon id="SCLL_531"><date value="71.682409" direction="forwards" units="years" /></taxon><taxon id="SCLL_532"><date value="81.360712" direction="forwards" units="years" /></taxon><taxon id="SCLL_533"><date value="84.167009" direction="forwards" units="years" /></taxon></taxa>
+
+<generalDataType id="biallelicBinary">
+	<state code="0" /> 
+	<state code="1" /> 
+	<state code="2" /> 
+</generalDataType>
+
+<alignment id="alignment">
+	<dataType idref="biallelicBinary" /><sequence><taxon idref="SCLL_493" />
+		102021212221011111110002111011120211010010212020010021010102211111121001102210111110220112120121111210001111110111121021002002012012121200112012101121020100111201021221100200012100210212011211002121002000102102010111001011000101011111211121111011212221110112121100101200201001211000121101121121010111012011000201200021020111110121102111221100101011122202221000012110102000010210112111121110222221211211222022111022021210121011011111112211111101021111101101110121202110102011011101111120011120120112121102121100201220010022201001112110011012001101001001011012000101000121120210010012001110101202001200011100011201100111102100111210012111111101111210012010101011010221011010210020200110201121211101211100020010100111200122222020012210120010111101011100121121001021120111101012210012212212021010111010010221111010110110020211100111101101112221212121111002001101221112012001021022111210111202221110201121111201122110002112211121002101011000222122111212111122011010222101122211011120
+	</sequence><sequence><taxon idref="SCLL_494" />
+		102021212221011101110002111011120211010010212020010021010102211111121001102210111110220112120121111200001111110111021021002002012012122200112012101121020100111201021221100200012100210212011211002121102000101102010111001011000101011112211121111011111121110112121100101200201001211000122201121121010111012011000201200021020111110121201111221100101011122202221000012110102000010210111111121110222221211221222012111022021210121011011111112211111111011111101011110121212110101011011101111120011120120112121102121100201220010022201001112120011012001101001001111012000101000121120210010012001110101202001200011100011201100112102100121210012111111101111210012010101011010211011010210020200110201121211101211100020010100111200122222020012210120010111101011100121121001021220111101012210012212212021010111010010221111010110110020211100111101101112222212121111002101101221112012001021122111210111202221110201121111201122110002102211121002101011000222122111112111122011011222101122211012121
+	</sequence><sequence><taxon idref="SCLL_531" />
+		102021212221011111110002111011120211011010212020010021010112111111121001102210111110220112120121111200001111111111121021002002012012121200112012101121020100111201021121100100012100210212011211002121002000101102010111001011000101011112211121111011112121111112121100101200201001211000121101121121010111012011000201200021010111110121102111221100101011122202221000012110102000010210111111121110222221211211222012111022021210121011011111112212111101011111101001110121211110101011011101111120011120120112121102121101201221010022201001112120011012001101001001011012000101000121120210010012001110101212001200011100011101100111102100111110012111111101111210012010101011010211011010210020200110201121211101211100020110100111200122222020012210120010111101011100121121001021220111101012200012212212021010111010010221111010110110020211100111101101012221212111111002001101221112012001021022110210111202221110201121111201122110002102211121002101011000222122111212111122011011222101122111011120
+	</sequence><sequence><taxon idref="SCLL_532" />
+		101021212221011111110002111011220221011010212010010021011102112011121001102211111110221112110111111200001111111111122021002002012012121200112012101121020101112201011121100100012110212212011221001121002000101102010111102011010101011112211221111011111111110112121100101210201201211100121201121121010111012011000201200021020121110121102111221100101011122201221001012010102000000210111121121110221221211221222012111022021210221011011111212212111101011111111001110121211110101011011001111121011121120212121102121101201221010012201001112121011012001001101002001211110101000121120210110012001110101202001200011100011101010112102110111100012111111101111210102010101011010211011010110020201100201121211211211100020010100111210112222120112110121010111101010110120121001022220121000012200112212212011010011010020221211010100210020211100111101101112221212111111002001111221112012001021022111210111212221110201121011201122110002102210121112101012000212111111212111122011011222101122111111120
+	</sequence><sequence><taxon idref="SCLL_533" />
+		112021212121012101010001111011120202011010212000011021010012112121021101102111111210210111111020111200001121211111121021002101011011121200112011101221120101111211120121100000112010221102011211012122202000100101010111101011000101011112211121111011111121111112121200101210112101211101121201121121020121012011100201200011022111110121101212221000201011122210221000122110002010020211112111221110221121211211221012111022011110121011001111212212111102011211001010000120201100101002001201111220110121120212121001121100201021010012202001112010011012001101001101111111000001000021120210101002001200100212001200001100012102200110222120210110012111111001111210012010101101010211011010210020200110201221211101211100020110101111200102222020012200121010112200010101110121001022220121000112201012212122021010012000020221212010000220020201100111101111011111112211211002101111121112012002221022111210111100211000201122111201122110002102211211002001111000222111111112101122011012222101111201011021
+	</sequence></alignment>
+
+	
+
+
+	<patterns id="patterns" from="1">
+        <alignment idref="alignment" />
+    </patterns>
+	
+	
+	
+	<constantSize id="constant" units="years">
+		<populationSize>
+			<parameter id="constant.popSize" value="1" lower="0.0" />
+		</populationSize>
+	</constantSize>
+	
+	<coalescentSimulator id="startingTree">
+		<taxa idref="taxa" />
+		<constantSize idref="constant" />
+	</coalescentSimulator>
+	
+	<treeModel id="treeModel">
+		<coalescentTree idref="startingTree" />
+		<rootHeight>
+			<parameter id="treeModel.rootHeight" />
+		</rootHeight>
+		<nodeHeights internalNodes="true">
+			<parameter id="treeModel.internalNodeHeights" />
+		</nodeHeights>
+		<nodeHeights internalNodes="true" rootNode="true">
+			<parameter id="treeModel.allInternalNodeHeights" />
+		</nodeHeights>
+	</treeModel>
+	
+	<coalescentLikelihood id="coalescent">
+		<model>
+			<constantSize idref="constant" />
+		</model>
+		<populationTree>
+			<treeModel idref="treeModel" />
+		</populationTree>
+	</coalescentLikelihood>
+	
+	<strictClockCenancestorBranchRates id="branchRates">
+		<rate>
+			<parameter id="clock.rate" value="0.02" />
+		</rate>
+	</strictClockCenancestorBranchRates>
+	<frequencyModel id="frequencies">
+		<dataType idref="biallelicBinary" />
+		<frequencies>
+			<parameter id="biallelicBinary.frequencies" value="0.5 0 0.5" />
+		</frequencies>
+	</frequencyModel>	
+	<BiallelicBinaryModel id="biallelicBinary_subsmodel">
+		<frequencies>
+			<frequencyModel idref="frequencies" />
+        </frequencies>
+		<demethylation_rate>
+            <parameter id="biallelicBinary.demethylation" value="1" lower="0" />
+        </demethylation_rate>
+        <homozygousDemethylation_rate>
+            <parameter id="biallelicBinary.homozygousDemethylation" value="1" lower="0" />
+        </homozygousDemethylation_rate>
+        <homozygousMethylation_rate>
+            <parameter id="biallelicBinary.homozygousMethylation" value="1" lower="0" />
+        </homozygousMethylation_rate>
+	</BiallelicBinaryModel>
+	<siteModel id="siteModel">
+		<substitutionModel>
+			<BiallelicBinaryModel idref="biallelicBinary_subsmodel" />
+		</substitutionModel>
+	</siteModel>
+	<cenancestorTreeLikelihood id="treeLikelihood" useAmbiguities="false" heightRules="true">
+		<patterns idref="patterns" />
+		<treeModel idref="treeModel" />
+		<siteModel idref="siteModel" />
+        	<cenancestorHeight>
+        		<parameter id="luca_height" value="89.167009" />
+        	</cenancestorHeight>
+		<cenancestorBranch>
+			<parameter id="luca_branch" value="5" upper="250" lower="0.0" />
+			
+		</cenancestorBranch>
+		<strictClockCenancestorBranchRates idref="branchRates" />
+	</cenancestorTreeLikelihood>	
+	<operators id="operators" optimizationSchedule="default">
+		<scaleOperator scaleFactor="0.5" weight="10.0">
+			<parameter idref="clock.rate" />
+        </scaleOperator>
+		<scaleOperator scaleFactor="0.25" weight="0.25">
+            <parameter idref="biallelicBinary.demethylation" />
+        </scaleOperator>
+        <scaleOperator scaleFactor="0.25" weight="0.25">
+            <parameter idref="biallelicBinary.homozygousMethylation" />
+        </scaleOperator>
+        <scaleOperator scaleFactor="0.25" weight="0.25">
+            <parameter idref="biallelicBinary.homozygousDemethylation" />
+        </scaleOperator>
+		<subtreeSlide size="2.5" gaussian="true" weight="15.0"> 
+			<treeModel idref="treeModel" />
+		</subtreeSlide>
+		<narrowExchange weight="15.0">
+			<treeModel idref="treeModel" />
+		</narrowExchange>
+		<wideExchange weight="3.0">
+			<treeModel idref="treeModel" />
+		</wideExchange>
+		<wilsonBalding weight="3.0">
+			<treeModel idref="treeModel" />
+		</wilsonBalding>
+		<scaleOperator scaleFactor="0.75" weight="5.0">
+			<parameter idref="treeModel.rootHeight" />
+		</scaleOperator>
+		<uniformOperator weight="30.0">
+			<parameter idref="treeModel.internalNodeHeights" />
+		</uniformOperator>
+		
+		<scaleOperator scaleFactor="0.5" weight="3.0">
+			<parameter idref="constant.popSize" />
+		</scaleOperator>
+        <upDownOperator scaleFactor="0.75" weight="5.0">
+            <up>
+                <parameter idref="clock.rate" />
+            </up>
+            <down>
+                <parameter idref="treeModel.allInternalNodeHeights" />
+            </down>
+        </upDownOperator>
+	</operators>
+	
+	<mcmc id="mcmc" chainLength="300000" autoOptimize="true" operatorAnalysis="fig4b_case19_zenodo.ops">
+		<posterior id="posterior">
+			<prior id="prior">
+            	<coalescentLikelihood idref="coalescent" />
+				<oneOnXPrior>
+					<parameter idref="constant.popSize" />
+				</oneOnXPrior>
+				
+	            <exponentialPrior mean="0.103725" offset="0.0"><parameter idref="clock.rate" /></exponentialPrior><uniformPrior lower="0.0" upper="250">
+                	<parameter idref="luca_branch" />
+                </uniformPrior>
+			<logNormalPrior mean="1" stdev="0.6" offset="0.0" meanInRealSpace="true"><parameter idref="biallelicBinary.demethylation" /></logNormalPrior><logNormalPrior mean="1" stdev="0.6" offset="0.0" meanInRealSpace="true"><parameter idref="biallelicBinary.homozygousMethylation" /></logNormalPrior><logNormalPrior mean="1" stdev="0.6" offset="0.0" meanInRealSpace="true"><parameter idref="biallelicBinary.homozygousDemethylation" /></logNormalPrior></prior>
+			<likelihood id="likelihood">
+				<cenancestorTreeLikelihood idref="treeLikelihood" />
+			</likelihood>
+		</posterior>
+		<operators idref="operators" />
+		
+		<log id="screenLog" logEvery="5000">
+			<column label="Posterior" dp="4" width="12">
+				<posterior idref="posterior" />
+			</column>
+			<column label="Prior" dp="4" width="12">
+				<prior idref="prior" />
+			</column>
+			<column label="Likelihood" dp="4" width="12">
+				<likelihood idref="likelihood" />
+			</column>
+			<column label="clock_rate" sf="6" width="12">
+				<parameter idref="clock.rate" />
+			</column>
+			<column label="rel_loss_rate" sf="6" width="12">
+				<parameter idref="biallelicBinary.demethylation" />
+			</column>
+			<column label="rel_loss_rate" sf="6" width="12">
+				<parameter idref="biallelicBinary.homozygousDemethylation" />
+			</column>
+			<column label="rel_loss_rate" sf="6" width="12">
+				<parameter idref="biallelicBinary.homozygousMethylation" />
+			</column>
+			<column label="rootHeight" sf="6" width="12">
+				<parameter idref="treeModel.rootHeight" />
+			</column>
+			<column label="luca_height" sf="6" width="12">
+				<parameter idref="luca_height" />
+			</column>
+			<column label="luca_branch" sf="6" width="12">
+				<parameter idref="luca_branch" />
+			</column>
+			
+		</log>
+		
+		<log id="fileLog" logEvery="5000" fileName="fig4b_case19_zenodo.log" overwrite="true">
+			<posterior idref="posterior" />
+			<prior idref="prior" />
+			<likelihood idref="likelihood" />
+			<parameter idref="biallelicBinary.demethylation" />
+			<parameter idref="biallelicBinary.homozygousDemethylation" />
+			<parameter idref="biallelicBinary.homozygousMethylation" />
+			<parameter idref="treeModel.rootHeight" />
+			<parameter idref="luca_height" />
+			<parameter idref="luca_branch" />
+			<parameter idref="constant.popSize" />
+			<parameter idref="clock.rate" />
+			<coalescentLikelihood idref="coalescent" />
+			
+		</log>
+		
+		<logTree id="treeFileLog" logEvery="5000" nexusFormat="true" fileName="fig4b_case19_zenodo.trees" sortTranslationTable="true">
+			<treeModel idref="treeModel" />
+			<trait name="rate" tag="rate">
+				<strictClockCenancestorBranchRates idref="branchRates" />
+			</trait>
+			
+			<posterior idref="posterior" />
+		</logTree>
+	</mcmc>
+	<report>
+		<property name="timer">
+			<mcmc idref="mcmc" />
+		</property>
+	</report>
+</beast>

@@ -1,0 +1,7 @@
+所有 sheet 名称： ['Figure 4a', 'Figure 4b', 'Figure 4c', 'Figure 4d']
+Sheet 'Figure 4a' 列数=37 前15列名： ['Figure 4a - Top (tree sequence)', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Figure 4a - Top (clone info)', 'Unnamed: 6', 'Unnamed: 7', 'Unnamed: 8', 'Unnamed: 9', 'Unnamed: 10', 'Unnamed: 11', 'Figure 4a - Middle Left', 'Unnamed: 13', 'Unnamed: 14']
+  ... 后5列： ['Unnamed: 32', 'Unnamed: 33', 'Unnamed: 34', 'Unnamed: 35', 'Unnamed: 36']
+Sheet 'Figure 4b' 列数=39 前15列名： ['Figure 4a - Top (tree sequence)', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Figure 4a - Top (clone info)', 'Unnamed: 6', 'Unnamed: 7', 'Unnamed: 8', 'Unnamed: 9', 'Unnamed: 10', 'Unnamed: 11', 'Unnamed: 12', 'Figure 4b - Middle Left', 'Unnamed: 14']
+  ... 后5列： ['Unnamed: 34', 'Unnamed: 35', 'Unnamed: 36', 'Unnamed: 37', 'Unnamed: 38']
+Sheet 'Figure 4c' 列数=4 前15列名： ['Unnamed: 0', 'SW-BCP-ALL-375', 'SW-BCP-ALL-725', 'SW-BCP-ALL-376']
+Sheet 'Figure 4d' 列数=3 前15列名： ['Unnamed: 0', 'SW-BCP-ALL-375', 'SW-BCP-ALL-376']

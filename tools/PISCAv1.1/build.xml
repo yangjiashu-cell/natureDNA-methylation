@@ -1,0 +1,161 @@
+<project name="PISCA" default="all" basedir=".">
+    <description> Plugin to perform phylogenetic estimation using somatic chromosomal alterations in BEAST</description>
+    <property file="beast_sdk.properties"/>
+    <property file="${user.home}/.ant-global.properties"/>
+    <fail message="The beast.root property must be set. This is usually done by copying the beast_sdk.properties.in to beast_sdk.properties and modifying it to so that beast.root refers to the appropriate path.">
+     <condition>
+       <not>
+         <isset property="beast.root"/>
+       </not>
+     </condition>
+   </fail>
+
+
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="lib" location="${beast.root}/build/dist"/>
+    <property name="dist" location="dist"/>
+    <property name="release" location="release"/>
+	<property name="examples" location="examples"/>
+	<property name="patch" location="patch"/>
+    <property name="version" value="1.1"/>
+    
+    <property name="plugin-class" value="PISCALoader"/>
+    <property name="plugin-package" value="PISCA"/>
+    <property name="plugin-jar" value="PISCA.PISCALoader.jar"/>
+
+    <property environment="env"/>
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="all"
+            depends="dist"
+            description="Build all run-time stuff">
+    </target>
+
+    <target name="build"
+            depends="compile-all"
+            description="alias to compile-all">
+    </target>
+
+    <target name="compile-all"
+            depends="compile-basic">
+    </target>
+    
+    <target name="compile-basic"
+            depends="init">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac source="1.8" srcdir="${src}" destdir="${build}"
+               classpath="${lib}/beast.jar">
+                            <include name="${plugin-package}/*.java"/>
+        </javac>
+    </target>
+
+    <target name="dist"
+            depends="compile-all"
+            description="create the plugin jar and any other resources needed for the distribution">
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+        <!-- Put everything in ${build} into the treestat.jar file -->
+        <jar jarfile="${dist}/${plugin-jar}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+            <fileset dir="${build}">
+                                <include name="${plugin-package}/*.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="release"
+            depends="dist"
+            description="creates a package to distribute the plugin">
+        <mkdir dir="${release}"/>
+        <copy todir="${release}/src">
+            <fileset dir="${src}"/>
+        </copy>
+		<copy todir="${release}/dist">
+	    	<fileset dir="${dist}"/>
+        </copy>
+		<copy todir="${release}/examples">
+	    	<fileset dir="${examples}"/>
+		</copy>
+		<copy todir="${release}/patch">
+			<fileset dir="${patch}"/>
+		</copy>
+		<copy file="README.md" todir="${release}"/>    
+		<copy file="LICENSE" todir="${release}"/>
+		<copy file="beast_sdk.properties.in" todir="${release}"/>
+		<copy file="build.xml" todir="${release}"/>
+		<copy file="install.sh" todir="${release}"/>
+		<tar destfile="${plugin-package}v${version}.tgz" compression="gzip">
+	    	<tarfileset dir="${release}" prefix="${plugin-package}v${version}"/>
+		</tar>
+		<delete dir="${release}" verbose="false"/>
+    </target>
+
+    <target name="install-developer"
+            depends="dist" 
+            description="Install the plugin into BEAST's plugins directory">
+		<mkdir dir="${beast.root}/lib/plugins" />
+		<copy file="${dist}/${plugin-jar}" todir="${beast.root}/lib/plugins" />
+    </target>
+
+    <target name="uninstall-developer"
+            description="Remove the plugin from BEAST's plugins directory">
+		<delete file="${beast.root}/lib/plugins/${plugin-jar}" verbose="true"/>
+    </target>
+
+    <target name="clean"
+            description="Removes build products, but does not uninstall">
+        <delete dir="${build}" verbose="true"/>
+        <delete dir="${dist}" verbose="true"/>
+    </target>
+    
+    <target name="install"
+            depends="dist"
+            description="Install PISCA using the script install.sh in beast.root, specified in beast_sdk.properties">
+        <exec executable="./install.sh"> 
+            <arg value="${beast.root}"/>
+        </exec>
+    </target>
+
+    <target name="uninstall"
+            description="Removes the jar file and restores the backup of the beast bin generated in the installation step">
+		<delete file="${beast.root}/lib/plugins/${plugin-jar}"/>
+        <move file="${beast.root}/bin/beast_bkp" tofile="${beast.root}/bin/beast"/>
+    </target>
+
+    <target name="test"
+            description="Runs integration tests of the plugin">
+        <mkdir dir="scratch" />
+        <exec executable="${beast.root}/bin/beast"
+           failonerror="false"
+           resultproperty="example.exitcode"
+           dir="scratch"
+           >
+            <arg value="-beagle_off"/>
+            <arg value="-seed"/>
+            <arg value="20"/>
+            <arg value="${basedir}/examples/validation.xml"/>
+        </exec>
+        <fail message="The example examples/validation.xml failed">
+            <condition>
+                <not> <equals arg1="${example.exitcode}" arg2="0"/></not>
+            </condition>
+        </fail>
+        <delete dir="scratch"/>
+    </target>
+
+    <target name="test-install"
+            depends="install,test" 
+            description="Installs PISCA and runs integration tests of the plugin">
+    </target>
+
+</project>

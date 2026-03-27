@@ -1,0 +1,18 @@
+participant_id_anonymous,participant_id,sample_id_wgs_Nadeu_2022,date_sample_wgs_Nadeu_2022,timepoint_wgs_Nadeu_2022,age_sample_wgs_Nadeu_2022,sample_id_dna_meth,dna_meth_platform,date_sample_dna_meth,age_sample_dna_meth,timepoint_dna_meth,timepoint_dna_meth_in_relation_to_wgs_Nadeu_2022,timepoint_dna_meth_wgs_used_fig.5,comments,data_info,disease_stage,age_diagnosis,age_RT,age_death,treatment_1,age_treatment_1,treatment_2,age_treatment_2,treatment_3,age_treatment_3,treatment_4,age_treatment_4,treatment_5,age_treatment_5,treatment_6,age_treatment_6
+SCLL-012,SCLL-012,,,,,,,,,,,,,dates,,59.0828199863108,78.6255989048597,78.7132101300479,RFCM,65.1690622861054,Benda-Obi,74.9322381930185,Ibrutinib,78.299794661191,R-CVP,78.6502395619439,,,,
+SCLL-012,SCLL-012,012-13-01TD,2000-01-18,T1,59.1348391512663,,,,,,,,"WGS,Nadeu2022",data,Diagnosis,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,012-02-1TD,2006-01-23,T2,65.1498973305955,012-02-1TD,450k,2006-01-23,65.1498973305955,T1,T2,T1,"450k,Puente2015",data,Pre-treatment progression,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,,,,,012-02-1TD,EPIC,2006-01-23,65.1498973305955,T1,T2,T1,"EPIC,Nadeu2022",data,Pre-treatment progression,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,012-11-01TD,2015-11-05,T3,74.9322381930185,,,,,,,,"WGS,Nadeu2022",data,Post-treatment,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,012-16-01TD,2019-02-12,T4,78.2039698836413,012-16-01TD,EPIC,2019-02-12,78.2039698836413,T2,T4,T2,"EPIC,Nadeu2022",data,Post-treatment-2,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,012-17-01TD,2019-03-12,T5,78.280629705681,012-17-01TD,EPIC,2019-03-12,78.280629705681,T3,T5,T3,"EPIC,Nadeu2022",data,Post-treatment-3,,,,,,,,,,,,,,,
+SCLL-012,SCLL-012,012-19-01TD,2019-07-22,T6,78.6420260095825,012-19-01TD,EPIC,2019-07-22,78.6420260095825,T4,T6,T4,"EPIC,Nadeu2022",data,RT,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,,,,,,,,,,,,,dates,,69.8042436687201,84.290212183436,84.2929500342232,CLB,73.4455852156058,CLB-R,76.952772073922,Duvelisib,80.4052019164956,CP,81.3826146475017,CBL-R,81.6728268309377,Ibrutinib,81.741273100616
+SCLL-018,SCLL-019,019-05-01TD,2004-02-24,T1,69.8042436687201,019-05-01TD,450k,2004-02-25,69.8069815195072,T1,T1,T1,"450k,ICGC,sequential",data,Diagnosis,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-0047-01TD,2006-01-10,T2,71.6824093086927,019-0047-01TD,450k,2006-01-10,71.6824093086927,T2,T2,T2,"450k,Puente2015",data,Pre-treatment progression,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-0047-01TD,,,,019-0047-01TD,EPIC,2006-01-10,71.6824093086927,T2,T2,T2,"EPIC,Nadeu2022",data,Pre-treatment progression,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,,,,,019-0048-06TDP,450k,2009-07-22,75.211498973306,T3,T2.2,T3,"450k,ICGC,sequential",data,Post-treatment,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-18-01TD,2011-04-13,T3,76.9363449691992,,,,,,,T4,"WGS,Nadeu2022",data,Post-treatment,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-19-01TD,2014-12-16,T4,80.6132785763176,,,,,,,,"WGS,Nadeu2022",data,Post-treatment-2,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-12-02TD,2015-09-15,T5,81.3607118412047,019-12-02TD,EPIC,2015-09-15,81.3607118412047,T4,T5,T5,"EPIC,Nadeu2022",data,Post-treatment-3,,,,,,,,,,,,,,,
+SCLL-018,SCLL-019,019-15-01TD,2018-07-06,T6,84.1670088980151,019-15-01TD,EPIC,2018-07-06,84.1670088980151,T5,T6,T6,"EPIC,Nadeu2022",data,RT,,,,,,,,,,,,,,,

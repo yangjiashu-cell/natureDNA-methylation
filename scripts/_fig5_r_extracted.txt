@@ -1,0 +1,680 @@
+##
+## Load libraries
+##
+
+
+library(data.table)
+library(openxlsx)
+library(ggpubr)
+library(ggpp)
+library(GGally)
+library(ggstats)
+library(survival)
+library(survminer)
+library(ggsurvfit)
+library(skimr)
+library(pals)
+library(ggforce)
+library(maxstat)
+library(cowplot)
+library(janitor)
+library(dplyr)
+
+
+options(stringsAsFactors = F,max.print = 10000,error=NULL,
+        &quot;openxlsx.dateFormat&quot; = &quot;dd/mm/yyyy&quot;
+        )
+
+# ===== CHUNK BREAK =====
+
+##
+## Load data source
+##
+
+
+cohort.discovery &lt;- openxlsx::read.xlsx(&quot;../../Revision/Results/CLL_clinics/Data_source_Fig.5.xlsx&quot;)
+cohort.discovery %&gt;% glimpse()
+
+##
+## Name evo variables
+##
+
+evo.variables &lt;- c(theta=&quot;theta&quot;,
+                   Scancer=&quot;Scancer&quot;,
+                   tau=&quot;tau&quot;,
+                   cancerAge=&quot;cancerAge&quot;,
+                   mu=&quot;mu&quot;,
+                   gamma=&quot;gamma&quot;,
+                   nu=&quot;nu&quot;,
+                   zeta=&quot;zeta&quot;
+                   )
+evo.variables.desciption &lt;- structure(names(evo.variables),
+                                      names=c(&quot;Growth rate&quot;,
+                                              &quot;Effective population size&quot;,
+                                              &quot;Patient&#39;s age at MRCA&quot;,&quot;Cancer age&quot;,
+                                              &quot;Homozygous to heterozygous\nmethylation rate&quot;,
+                                              &quot;Homozygous to heterozygous\ndemethylation rate&quot;,
+                                              &quot;Heterozygous to homozygous\nmethylation rate&quot;,
+                                              &quot;Heterozygous to homozygous\ndemethylation rate&quot;)
+                                      )
+
+
+
+
+
+cohort &lt;- &quot;Discovery&quot;
+
+# ===== CHUNK BREAK =====
+
+#
+## Make plots
+##
+
+
+
+## plot correlation across variables
+p &lt;- ggpairs(cohort.discovery %&gt;%
+               filter(!is.na(DISEASE_SUBTYPE)) %&gt;%
+               mutate(IGHV=factor(DISEASE_SUBTYPE,levels=c(&quot;mutated&quot;,&quot;unmutated&quot;),labels=c(&quot;M-CLL&quot;,&quot;U-CLL&quot;))) %&gt;%
+               rename(evo.variables.desciption) %&gt;%
+               select(IGHV,
+                      Age=AGE_SAMPLING,
+                      all_of(names(evo.variables.desciption))
+               ),
+             mapping = aes(colour=IGHV),
+             # legend = 1,
+             upper = list(continuous = wrap(&quot;cor&quot;, 
+                                            title=&quot;p&quot;,
+                                            size=1.5
+             ),
+             combo=wrap(&quot;box_no_facet&quot;,
+                        outlier.size=0.5,
+                        lwd=0.2)
+             ),
+             lower = list(continuous = wrap(&quot;points&quot;, size = 0.15)),
+             diag = list(continuous = wrap(&quot;densityDiag&quot;,lwd=0.2)
+             )
+)+
+  scale_color_manual(values = c(&quot;U-CLL&quot;=&quot;#e65100&quot;,
+                                &quot;M-CLL&quot;=&quot;#361379&quot;),
+                     aesthetics = c(&quot;color&quot;,&quot;fill&quot;)
+  )+
+  theme_classic() +
+  theme(axis.text = element_text(size = 5),
+        axis.text.x = element_text(angle = 90,hjust = 1,vjust = 1),
+        line=element_line(linewidth = 0.3),
+        strip.text = element_text(size=5),
+        strip.background = element_blank(),
+        strip.text.x = element_text(angle = 90,hjust = 0,vjust = 0.5),
+        strip.text.y = element_text(angle = 0,hjust = 0,vjust = 0.5)
+  )
+print(p)
+
+# ===== CHUNK BREAK =====
+
+##
+## UNIVARIATE COX MODELS FOR TTFT OS
+##
+
+
+TTFT.uni &lt;- lapply(evo.variables, function(evo){
+  
+  dat &lt;- cohort.discovery %&gt;% 
+    filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;)
+  
+  if(evo==&quot;Scancer&quot; | evo==&quot;Scancer_evomode&quot;){
+    dat[,evo] &lt;- dat[,evo]/1e6 ##each 1M cells
+  }
+  
+  if(evo==&quot;tau&quot;){
+    dat[,evo] &lt;- dat[,evo]/10 ##each 10 years
+  }
+  # if(evo==&quot;FMCs.tau_rel&quot;|evo==&quot;zeta_rel&quot;){
+  #   dat[,evo] &lt;- dat[,evo]*10 ##each 0.1
+  # }
+  
+  if(evo==&quot;mu&quot; | evo==&quot;gamma&quot; | evo==&quot;nu&quot;){
+    dat[,evo] &lt;- dat[,evo]*100 ##each 0.1
+  }
+  
+  if(evo==&quot;zeta&quot;){
+    dat[,evo] &lt;- dat[,evo]*1000 ##each 0.1
+  }
+  
+  # 
+  ##survival analsysis
+  cox &lt;- coxph(Surv(time = as.numeric(Clinics.TTFT_DAYS_SAMPLING/365.25),event = as.numeric(Clinics.TTFT))~
+                 evo,
+               data =  dat %&gt;%
+                 select(Clinics.TTFT,Clinics.TTFT_DAYS_SAMPLING,
+                        evo=all_of(evo)
+                 ) %&gt;%
+                 tidyr::drop_na()
+  )
+  # summary(cox)
+  ##get HR and pval
+  df &lt;- data.frame(evo.variable=evo,
+                   end.point=&quot;TTFT&quot;,
+                   Hazard.ratio=summary(cox)$coefficients[,&quot;exp(coef)&quot;],
+                   summary(cox)$conf.int[,c(&quot;lower .95&quot;,&quot;upper .95&quot;)] %&gt;% t(),
+                   pval=summary(cox)$coefficients[,&quot;Pr(&gt;|z|)&quot;]
+  )
+  return(df)
+  
+  
+})
+TTFT.uni &lt;- do.call(rbind,TTFT.uni)
+TTFT.uni
+
+OS.uni &lt;- lapply(evo.variables, function(evo){
+  
+  if(cohort!=&quot;validation&quot;){
+    dat &lt;- cohort.discovery %&gt;% 
+      filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;) 
+  }else{
+    dat &lt;- cohort.discovery
+  }
+  
+  if(evo==&quot;Scancer&quot; | evo==&quot;Scancer_evomode&quot;){
+    dat[,evo] &lt;- dat[,evo]/1e6 ##each 1M cells
+  }
+  
+  if(evo==&quot;tau&quot;){
+    dat[,evo] &lt;- dat[,evo]/10 ##each 10 years
+  }
+  # if(evo==&quot;FMCs.tau_rel&quot;|evo==&quot;zeta_rel&quot;){
+  #   dat[,evo] &lt;- dat[,evo]*10 ##each 0.1
+  # }
+  
+  if(evo==&quot;mu&quot; | evo==&quot;gamma&quot; | evo==&quot;nu&quot;){
+    dat[,evo] &lt;- dat[,evo]*100 ##each 0.1
+  }
+  
+  if(evo==&quot;zeta&quot;){
+    dat[,evo] &lt;- dat[,evo]*1000 ##each 0.1
+  }
+  
+  cox &lt;- coxph(Surv(time = as.numeric(Clinics.OS_DAYS_SAMPLING/365.25),event = as.numeric(Clinics.OS))~
+                 evo,
+               data =  dat %&gt;%
+                 select(Clinics.OS,Clinics.OS_DAYS_SAMPLING,
+                        evo=all_of(evo)
+                 ) %&gt;%
+                 tidyr::drop_na()
+  )
+  
+  df &lt;- data.frame(evo.variable=evo,
+                   end.point=&quot;OS&quot;,
+                   Hazard.ratio=summary(cox)$coefficients[,&quot;exp(coef)&quot;],
+                   summary(cox)$conf.int[,c(&quot;lower .95&quot;,&quot;upper .95&quot;)] %&gt;% t(),
+                   pval=summary(cox)$coefficients[,&quot;Pr(&gt;|z|)&quot;]
+  )
+  
+  return(df)
+  
+  
+})
+OS.uni &lt;- do.call(rbind,OS.uni)
+OS.uni
+
+
+cox.data &lt;- rbind(TTFT.uni,OS.uni)
+cox.data
+
+
+## plot 
+p &lt;- cox.data %&gt;%
+  # group_by(desc(end.point)) %&gt;% 
+  # arrange(Hazard.ratio,.by_group = T) %&gt;%
+  arrange(factor(evo.variable,levels=rev(c(&quot;theta&quot;,&quot;Scancer&quot;,&quot;tau&quot;,&quot;cancerAge&quot;,&quot;gamma&quot;,&quot;zeta&quot;,&quot;mu&quot;,&quot;nu&quot;)))) %&gt;%## keep the same order as main figure for figure consistency: theta,
+  mutate(
+    evo.variable=factor(evo.variable,levels=unique(evo.variable)),
+    pval=glue::glue(&quot;~italic(P) == {signif(pval,2)}&quot;)
+  ) %&gt;% 
+  ggplot(aes(x=Hazard.ratio,
+             y=evo.variable,
+             xmin=lower..95,
+             xmax=upper..95,
+             color=end.point,
+             shape=end.point,
+             label=pval,
+             # group=end.point,
+             # alpha=rev(pval.cut)
+  ))+
+  geom_stripped_rows(col=NA,
+                     nudge_y = 0.1)+
+  geom_vline(xintercept = 1,
+             color=&quot;grey70&quot;,
+             lty=&quot;dashed&quot;,
+             lwd=0.2
+  )+
+  geom_errorbar(width=0.25,
+                position = position_dodge(width = 0.6),
+                lwd=0.2
+  )+
+  geom_point(size=1.5,
+             position = position_dodge(width = 0.6)
+  )+
+  geom_text(alpha=1,
+            position = position_dodgenudge(width = 0.6,y = 0.22),
+            size=2,
+            parse=T,
+            show.legend = F,
+            color=&quot;grey0&quot;
+  )+
+  scale_shape_manual(&quot;Univariate Cox analyses:&quot;,
+                     values = c(&quot;TTFT&quot;=15,&quot;OS&quot;=19),
+                     limits=c(&quot;TTFT&quot;,&quot;OS&quot;),
+  )+
+  scale_color_manual(&quot;P-value&quot;,
+                     values = structure(pals::coolwarm(2),names=c(&quot;TTFT&quot;,&quot;OS&quot;))
+  )+
+  # scale_alpha_discrete(range=c(0.6,1))+
+  annotate(geom = &quot;text&quot;,
+           label=c(paste0(&quot;TTFT, N=&quot;,cohort.discovery %&gt;% filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;) %&gt;% nrow(),
+                          &quot;, events=&quot;,cohort.discovery %&gt;% filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;,Clinics.TTFT==1) %&gt;% nrow()
+           ),
+           paste0(&quot;OS, N=&quot;,cohort.discovery %&gt;% filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;) %&gt;% nrow(),
+                  &quot;, events=&quot;,cohort.discovery %&gt;% filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;,Clinics.OS==1) %&gt;% nrow()
+           )
+           ),
+           x=1.75,
+           y=c(1.25,1),
+           hjust=0,
+           size=1.75
+  )+
+  guides(color=guide_none(),
+         alpha=guide_none(),
+         shape=guide_legend(override.aes = list(color=structure(pals::coolwarm(2),names=c(&quot;TTFT&quot;,&quot;OS&quot;)))),
+  )+
+  scale_x_log10()+
+  ylab(NULL)+
+  xlab(&quot;Hazard ratio (95% CI)&quot;)+
+  scale_y_discrete(labels=structure(names(evo.variables.desciption),names=evo.variables.desciption))+
+  theme_bw()+
+  theme(text=element_text(color=&quot;grey0&quot;,size = 6),
+        line = element_line(linewidth = 0.2),
+        axis.text = element_text(color=&quot;grey0&quot;),
+        legend.key.size = unit(0,&quot;pt&quot;),
+        legend.position = &quot;top&quot;,
+        legend.margin=margin(0,0,0,0),
+        legend.background = element_blank(),
+        legend.box.background = element_blank(),
+        # legend.spacing.y = unit(3,&quot;pt&quot;),
+        legend.box.spacing = unit(3,&quot;pt&quot;),
+        legend.justification = &quot;left&quot;,
+        legend.title = element_text(vjust = 1),
+        panel.border = element_rect(fill = NA,color=NA,linewidth = 0.3)
+  )
+
+print(p)
+
+# ===== CHUNK BREAK =====
+
+#
+## PLOT KM CURVES FOR theta and Scancer with IGHV subgroups
+##
+
+###TTFT theta
+variables &lt;-  evo.variables[c(&quot;theta&quot;,&quot;Scancer&quot;)] %&gt;% as.character()
+variables
+
+df.KM &lt;- lapply(split(seq_along(1:nrow(cohort.discovery)),cohort.discovery$DISEASE_SUBTYPE),
+                function(indx){
+                  
+                  dat &lt;- 
+                    cohort.discovery %&gt;% 
+                    slice(indx) %&gt;%
+                    filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;) %&gt;%
+                    mutate(Clinics.TTFT=as.numeric(Clinics.TTFT),
+                           Clinics.OS=as.numeric(Clinics.OS)
+                    ) %&gt;%
+                    select(
+                           Clinics.TTFT,Clinics.TTFT_DAYS_SAMPLING,
+                           Clinics.OS,Clinics.OS_DAYS_SAMPLING,
+                           DISEASE_SUBTYPE,
+                           all_of(variables)
+                    ) %&gt;%
+                    tidyr::drop_na()
+                  
+                  variables &lt;- 
+                    surv_cutpoint(data=dat,
+                                  time = &quot;Clinics.TTFT_DAYS_SAMPLING&quot;,
+                                  event = &quot;Clinics.TTFT&quot;,
+                                  variables=variables) %&gt;% 
+                    surv_categorize() %&gt;% 
+                    data.frame()  %&gt;%  
+                    select(all_of(variables))
+                  
+                  colnames(variables) &lt;- paste0(colnames(variables),&quot;.IGHV.maxstat&quot;)
+                  variables &lt;- apply(variables,2,function(x)paste0(dat$DISEASE_SUBTYPE,&quot;-&quot;,x))
+                  dat &lt;- cbind(dat,variables)
+                  
+                  return(dat)
+                  
+                })
+
+df.KM &lt;- do.call(rbind,df.KM)
+head(df.KM);dim(df.KM)
+
+
+### TTFT theta
+fit &lt;- survfit2(Surv(time = Clinics.TTFT_DAYS_SAMPLING/365.25,event = as.numeric(Clinics.TTFT))~IGHV.theta,
+                data = df.KM %&gt;%
+                  mutate(IGHV.theta=factor(theta.IGHV.maxstat,
+                                           levels=c(&quot;mutated-low&quot;,&quot;mutated-high&quot;,&quot;unmutated-low&quot;,&quot;unmutated-high&quot;),
+                                           labels=c(&quot;M-CLL, low growth rate&quot;,&quot;M-CLL, high growth rate&quot;,
+                                                    &quot;U-CLL, low growth rate&quot;,&quot;U-CLL, high growth rate&quot;
+                                           )
+                  )
+                  )
+)
+
+pairwise.pvals &lt;- pairwise_survdiff(Surv(time = Clinics.TTFT_DAYS_SAMPLING/365.25,event = as.numeric(Clinics.TTFT))~IGHV.theta,
+                                    data = df.KM %&gt;%
+                                      mutate(IGHV.theta=factor(theta.IGHV.maxstat,
+                                                               levels=c(&quot;mutated-low&quot;,&quot;mutated-high&quot;,&quot;unmutated-low&quot;,&quot;unmutated-high&quot;),
+                                                               labels=c(&quot;M-CLL, low growth rate&quot;,&quot;M-CLL, high growth rate&quot;,
+                                                                        &quot;U-CLL, low growth rate&quot;,&quot;U-CLL, high growth rate&quot;
+                                                               )
+                                      )
+                                      ),
+                                    p.adjust.method = &quot;none&quot;
+)
+pairwise.pvals$p.value
+
+
+p &lt;- fit %&gt;%
+  ggsurvfit(type = &quot;risk&quot;,linewidth=0.3) +
+  add_confidence_interval(alpha=0.1)+
+  add_risktable(risktable_stats = &quot;n.risk&quot;,
+                theme = theme_risktable_default(plot.title.size = 5),
+                size = 2)+
+  add_risktable_strata_symbol()+
+  add_censor_mark(size=3,shape=&quot;|&quot;)+
+  coord_cartesian(xlim = c(0,12))+
+  scale_x_continuous(breaks = 0:12)+
+  ylab(&quot;Probability of treatment&quot;)+
+  xlab(&quot;Years from sampling&quot;)+
+  scale_color_manual(values = c(&quot;#757099&quot;,&quot;#2B2A65&quot;,&quot;#E8A78F&quot;,&quot;#C93A17&quot;),
+                     labels=sapply(seq_along(fit$strata),function(i){
+                       paste0(gsub(&quot;IGHV.theta=&quot;,&quot;&quot;,names(fit$strata[i])),&quot; (N=&quot;,fit$n[[i]],&quot;)&quot;)}),
+                     aesthetics = c(&quot;color&quot;,&quot;fill&quot;)
+  )+
+  guides(color=guide_legend(ncol = 2))+
+  annotate(geom = &quot;text&quot;,
+           label=c(glue::glue(&quot;italic(&#39;P&#39;) == {signif(surv_pvalue(fit)$pval,3)}&quot;),
+                   glue::glue(
+                     &quot;italic(&#39;P&#39;) ==
+                     {signif(pairwise.pvals$p.value %&gt;% reshape2::melt() %&gt;% filter(Var1==&#39;U-CLL, high growth rate&#39;,Var2==&#39;U-CLL, low growth rate&#39;) %&gt;%pull(value),3)}&quot;
+                   ),
+                   glue::glue(
+                     &quot;italic(&#39;P&#39;) ==
+                     {signif(pairwise.pvals$p.value %&gt;% reshape2::melt() %&gt;% filter(Var1==&#39;M-CLL, high growth rate&#39;,Var2==&#39;M-CLL, low growth rate&#39;) %&gt;%pull(value),3)}&quot;
+                   )
+           ),
+           parse=T,
+           x=c(0.5,10,10),
+           y=c(1,0.95,0.35),
+           size=2,
+           hjust=0,
+           vjust=0
+  )+
+  theme_classic()+
+  theme(text=element_text(size=5,colour = &quot;grey0&quot;),
+        axis.text = element_text(size = 5,colour = &quot;grey0&quot;),
+        axis.title = element_text(size = 6,colour = &quot;grey0&quot;),
+        line = element_line(linewidth = 0.2),
+        legend.key.size = unit(0,&quot;pt&quot;),
+        legend.position = &quot;top&quot;,
+        legend.text = element_text(size = 5),
+        legend.margin=margin(0,0,0,0),
+        legend.background = element_blank(),
+        legend.box.background = element_blank(),
+        legend.spacing = unit(3,&quot;pt&quot;),
+        legend.box.spacing = unit(3,&quot;pt&quot;)
+  )
+
+print(p)
+
+# ===== CHUNK BREAK =====
+
+### OS SCancer
+fit &lt;- survfit2(Surv(time = Clinics.OS_DAYS_SAMPLING/365.25,event = as.numeric(Clinics.OS))~IGHV.Scancer,
+                data = df.KM %&gt;%
+                  mutate(IGHV.Scancer=factor(Scancer.IGHV.maxstat,
+                                             levels=c(&quot;mutated-low&quot;,&quot;mutated-high&quot;,&quot;unmutated-low&quot;,&quot;unmutated-high&quot;),
+                                             labels=c(&quot;M-CLL, low EPS&quot;,&quot;M-CLL, high EPS&quot;,
+                                                      &quot;U-CLL, low EPS&quot;,&quot;U-CLL, high EPS&quot;
+                                             )
+                  )
+                  )
+)
+
+pairwise.pvals &lt;- pairwise_survdiff(Surv(time = Clinics.TTFT_DAYS_SAMPLING/365.25,event = as.numeric(Clinics.OS))~IGHV.Scancer,
+                                    data = df.KM %&gt;%
+                                      mutate(IGHV.Scancer=factor(Scancer.IGHV.maxstat,
+                                                                 levels=c(&quot;mutated-low&quot;,&quot;mutated-high&quot;,&quot;unmutated-low&quot;,&quot;unmutated-high&quot;),
+                                                                 labels=c(&quot;M-CLL, low EPS&quot;,&quot;M-CLL, high EPS&quot;,
+                                                                          &quot;U-CLL, low EPS&quot;,&quot;U-CLL, high EPS&quot;
+                                                                 )
+                                      )
+                                      ),
+                                    p.adjust.method = &quot;none&quot;
+)
+pairwise.pvals$p.value
+
+
+p &lt;- fit %&gt;%
+  ggsurvfit(type = &quot;survival&quot;,linewidth=0.3) +
+  add_confidence_interval(alpha=0.1)+
+  add_risktable(risktable_stats = &quot;n.risk&quot;,
+                theme = theme_risktable_default(plot.title.size = 5),
+                size = 2)+
+  add_risktable_strata_symbol()+
+  add_censor_mark(size=3,shape=&quot;|&quot;)+
+  ylab(&quot;Probability of survival&quot;)+
+  xlab(&quot;Years from sampling&quot;)+
+  scale_color_manual(values = c(&quot;#757099&quot;,&quot;#2B2A65&quot;,&quot;#E8A78F&quot;,&quot;#C93A17&quot;),
+                     labels=sapply(seq_along(fit$strata),function(i){
+                       paste0(gsub(&quot;IGHV.Scancer=&quot;,&quot;&quot;,names(fit$strata[i])),&quot; (N=&quot;,fit$n[[i]],&quot;)&quot;)}),
+                     aesthetics = c(&quot;color&quot;,&quot;fill&quot;)
+  )+
+  guides(color=guide_legend(ncol = 2))+
+  annotate(geom = &quot;text&quot;,
+           label=c(glue::glue(&quot;italic(&#39;P&#39;) == {signif(surv_pvalue(fit)$pval,3)}&quot;),
+                   glue::glue(
+                     &quot;italic(&#39;P&#39;) ==
+                     {signif(pairwise.pvals$p.value %&gt;% reshape2::melt() %&gt;% 
+                       filter(Var1==&#39;U-CLL, high EPS&#39;,Var2==&#39;U-CLL, low EPS&#39;) %&gt;%pull(value),3)
+                       }&quot;
+                   ),
+                   glue::glue(
+                     &quot;italic(&#39;P&#39;) ==
+                     {signif(pairwise.pvals$p.value %&gt;% 
+                       reshape2::melt() %&gt;% filter(Var1==&#39;M-CLL, high EPS&#39;,Var2==&#39;M-CLL, low EPS&#39;) %&gt;%pull(value),3)
+                       }&quot;
+                   )
+           ),
+           parse=T,
+           x=c(0.5,10,10),
+           y=c(0.25,0.35,0.9),
+           size=2,
+           hjust=0,
+           vjust=0
+  )+
+  theme_classic()+
+  theme(text=element_text(size=5,colour = &quot;grey0&quot;),
+        axis.text = element_text(size = 5,colour = &quot;grey0&quot;),
+        axis.title = element_text(size = 6,colour = &quot;grey0&quot;),
+        line = element_line(linewidth = 0.2),
+        legend.key.size = unit(0,&quot;pt&quot;),
+        legend.position = &quot;top&quot;,
+        legend.text = element_text(size = 5),
+        legend.margin=margin(0,0,0,0),
+        legend.background = element_blank(),
+        legend.box.background = element_blank(),
+        legend.spacing = unit(3,&quot;pt&quot;),
+        legend.box.spacing = unit(3,&quot;pt&quot;)
+  )
+
+print(p)
+
+# ===== CHUNK BREAK =====
+
+##
+## plot multivariate analsyes for cohort.discovery series TTFT
+##
+
+cox.data &lt;- cohort.discovery %&gt;%
+  filter(SAMPLING_TIME_TREATMENT_STATUS==&quot;Untreated&quot;) %&gt;%
+  mutate(Clinics.TTFT=as.numeric(Clinics.TTFT),
+         Clinics.OS=as.numeric(Clinics.OS),
+         Age=I(AGE_SAMPLING/10),
+         TP53= factor(ifelse(Genomics.Mutation_TP53!=&quot;WT&quot; | 
+                               Genomics.loss_17p13.1!=&quot;WT&quot; |
+                               (!is.na(Genomics.loss_17p) &amp; Genomics.loss_17p!=&quot;WT&quot;), &quot;Altered&quot;,&quot;WT&quot;),
+                      levels=c(&quot;WT&quot;,&quot;Altered&quot;)
+         ),
+         IGHV=factor(DISEASE_SUBTYPE,levels=c(&quot;mutated&quot;,&quot;unmutated&quot;),labels=c(&quot;M-CLL&quot;,&quot;U-CLL&quot;)),
+         Scancer=Scancer/1e6
+  ) %&gt;%
+  select(Clinics.TTFT,
+         Clinics.TTFT_DAYS_SAMPLING,
+         Clinics.OS,
+         Clinics.OS_DAYS_SAMPLING,
+         IGHV,
+         TP53,
+         theta,
+         Scancer,
+         Age
+  ) %&gt;% 
+  tidyr::drop_na()
+
+head(cox.data);dim(cox.data)
+
+
+cox.ttft.multi &lt;- (coxph(Surv(time = Clinics.TTFT_DAYS_SAMPLING/365.25,event = Clinics.TTFT)~
+                           theta +
+                           IGHV +
+                           TP53+
+                           Age,
+                         data = cox.data
+)
+)
+
+cox.os.multi &lt;- (coxph(Surv(time = Clinics.OS_DAYS_SAMPLING/365.25,event = Clinics.OS)~
+                         Scancer+
+                         IGHV+
+                         TP53+
+                         Age,
+                       data = cox.data
+)
+)
+
+
+
+##loop to plot multivariate Cox for TTFT and OS
+
+for(cox.type in c(&quot;ttft&quot;,&quot;os&quot;)){
+  
+  if(cox.type==&quot;ttft&quot;){
+    df.cox &lt;- cox.ttft.multi
+  }
+  if(cox.type==&quot;os&quot;){
+    df.cox &lt;- cox.os.multi  
+  }
+  
+  ##construct df to plot
+  df.cox.multi &lt;- 
+    data.frame(variable=names(attr(df.cox$terms,&quot;dataClasses&quot;)[-1]),
+               coefs=names(df.cox$coefficients),
+               Hazard.ratio=summary(df.cox)$coefficients[,&quot;exp(coef)&quot;],
+               summary(df.cox)$conf.int[,c(&quot;lower .95&quot;,&quot;upper .95&quot;)],
+               pval=summary(df.cox)$coefficients[,&quot;Pr(&gt;|z|)&quot;]
+    )
+  ##update variable names with N for ploting
+  df.cox.multi$variable &lt;- sapply(seq_along(df.cox.multi$variable),function(i){
+    if(df.cox.multi$variable[i]==df.cox.multi$coefs[i]){ #numeric variable, plot then total number of ccases
+      res &lt;- df.cox.multi$variable[i]
+    }else{ # factor variable, plot number of measured variable and not the reference strata
+      var &lt;- df.cox.multi$variable[i]
+      var.stata &lt;- gsub(var,&quot;&quot;,df.cox.multi$coefs[i])
+      res &lt;- paste0(var,&quot;\n(N=&quot;,length(which(cox.data[,var]==var.stata)),&quot;)&quot;)  
+    }
+    return(res)
+  })
+  # df.cox.ttft.multi
+  
+  p &lt;- df.cox.multi %&gt;%
+    arrange(Hazard.ratio) %&gt;% 
+    mutate(variable=factor(variable,levels=unique(variable)),
+           pval=ifelse(!is.na(pval),glue::glue(&quot;~italic(P) == {signif(pval,2)}&quot;),NA)
+    )%&gt;% 
+    ggplot(aes(x=Hazard.ratio,
+               y=variable,
+               xmin=lower..95,
+               xmax=upper..95,
+               label=pval,
+               # group=end.point,
+               # alpha=rev(pval.cut)
+    ))+
+    geom_stripped_rows(col=NA,
+                       nudge_y = 0.1)+
+    geom_vline(xintercept = 1,
+               color=&quot;grey70&quot;,
+               lty=&quot;dashed&quot;,
+               lwd=0.2
+    )+
+    geom_errorbar(width=0.25,
+                  position = position_dodge(width = 0.6),
+                  lwd=0.2
+    )+
+    geom_point(size=1.5,
+               shape=15, ##consistency with previous plots
+               position = position_dodge(width = 0.6)
+    )+
+    geom_text(alpha=1,
+              position = position_dodgenudge(width = 0.6,y = 0.4),
+              size=2,
+              parse=T,
+              show.legend = F,
+              color=&quot;grey0&quot;
+    )+
+    annotate(geom = &quot;text&quot;,
+             label=c(paste0(&quot;N=&quot;,df.cox$n),
+                     paste0(&quot;Events=&quot;,df.cox$nevent,&quot;, CI=&quot;,round(summary(df.cox)$concordance[&quot;C&quot;],3)),
+                     paste0(&quot;Global p-value=&quot;,signif(summary(df.cox)$logtest[[&quot;pvalue&quot;]],3))
+             ),
+             x=2.75,
+             y=c(1.3,1,0.7),
+             hjust=0,
+             size=1.5
+    )+
+    scale_y_discrete(labels=structure(names(evo.variables.desciption),names=evo.variables.desciption))+
+    scale_x_log10()+
+    ylab(NULL)+
+    xlab(&quot;Hazard ratio (95% CI)&quot;)+
+    ggtitle(NULL,paste0(&quot;Multivariate Cox &quot;,cox.type,&quot; &quot;,cohort))+
+    theme_bw()+
+    theme(text=element_text(color=&quot;grey0&quot;,size = 6),
+          line = element_line(linewidth = 0.2),
+          axis.text = element_text(color=&quot;grey0&quot;),
+          legend.key.size = unit(0,&quot;pt&quot;),
+          legend.position = &quot;top&quot;,
+          legend.margin=margin(0,0,0,0),
+          legend.background = element_blank(),
+          legend.box.background = element_blank(),
+          # legend.spacing.y = unit(3,&quot;pt&quot;),
+          legend.box.spacing = unit(3,&quot;pt&quot;),
+          legend.justification = &quot;left&quot;,
+          legend.title = element_text(vjust = 1),
+          panel.border = element_rect(fill = NA,color=NA,linewidth = 0.3)
+    )
+  print(p)
+  
+}
+
+# ===== CHUNK BREAK =====
+
+print(sessionInfo())

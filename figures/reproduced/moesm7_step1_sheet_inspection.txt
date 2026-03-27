@@ -1,0 +1,8 @@
+所有 sheet 名称： ['Figure 3a', 'Figure 3b', 'Figure 3c', 'Figure 3d', 'Figure 3e', 'Figure 3f', 'Figure 3g']
+Sheet 'Figure 3a' 前5列名： ['data_SCLL-059', 'posterior_predictive_SCLL-059']
+Sheet 'Figure 3b' 前5列名： ['DIAGNOSIS_CLINICAL', 'theta', 'Scancer']
+Sheet 'Figure 3c' 前5列名： ['DIAGNOSIS_CLINICAL', 'cancerAge', 'epiRate']
+Sheet 'Figure 3d' 前5列名： ['PARTICIPANT_ID_ANONYMOUS', 'DISEASE_SUBTYPE', 'theta', 'Scancer']
+Sheet 'Figure 3e' 前5列名： ['PARTICIPANT_ID_ANONYMOUS', 'DISEASE_SUBTYPE', 'theta', 'Scancer']
+Sheet 'Figure 3f' 前5列名： ['PARTICIPANT_ID_ANONYMOUS', 'DISEASE_SUBTYPE', 'theta', 'Scancer']
+Sheet 'Figure 3g' 前5列名： ['PARTICIPANT_ID_ANONYMOUS', 'DISEASE_SUBTYPE', 'theta', 'Scancer', 'TP53']

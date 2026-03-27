@@ -1,0 +1,5 @@
+# BEAST v1.10.4 Prerelease #bc6cbd9
+# Generated Fri Mar 27 16:12:46 CST 2026 [seed=1774599165915]
+# -overwrite -java D:\naturedna\evoflux-reproduce\figures\reproduced\snv_beast10_prep\snv_case12_case19_beast10.xml
+state	posterior	prior	likelihood	clock.rate	treeModel.rootHeight	constant.popSize	binary.frequencies1	binary.frequencies2
+0	0.0	0.0	0.0	1.0	19.132812899941307	1.0	0.5000000001	0.4999999999

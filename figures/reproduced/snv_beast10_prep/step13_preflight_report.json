@@ -1,0 +1,86 @@
+{
+  "moesm3": "D:\\naturedna\\evoflux-reproduce\\evoflux\\41586_2025_9374_MOESM3_ESM.xlsx",
+  "outputs": {
+    "wgs_snv_table": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\supplementary_table_15_wgs_snv.csv",
+    "wgs_mode_table": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\supplementary_table_16_wgs_modes.csv",
+    "case_binary_matrices": {
+      "1": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\case_1_binary_matrix.csv",
+      "29": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\case_29_binary_matrix.csv",
+      "661": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\case_661_binary_matrix.csv",
+      "677": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\case_677_binary_matrix.csv",
+      "199": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\case_199_binary_matrix.csv"
+    },
+    "wgs_snv_annotated": null,
+    "beast10_xml_attempt": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10.xml",
+    "beast10_log_attempt": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10.log",
+    "beast10_trees_attempt": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10.trees",
+    "beast10_xml_final": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10_treedata_proxy.xml",
+    "beast10_log_final": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10_treedata_proxy.log",
+    "beast10_trees_final": "D:\\naturedna\\evoflux-reproduce\\figures\\reproduced\\snv_beast10_prep\\snv_case12_case19_beast10_treedata_proxy.trees"
+  },
+  "summary": {
+    "wgs_snv_rows": 394080,
+    "n_unique_cases": 147,
+    "n_cases_with_ge2_samples": 23,
+    "top_cases_by_sample_count": {
+      "1": 2,
+      "29": 2,
+      "661": 2,
+      "677": 2,
+      "199": 2,
+      "853": 2,
+      "179": 2,
+      "139": 2,
+      "138": 2,
+      "122": 2
+    },
+    "case_1_shape": [
+      2,
+      3407
+    ],
+    "case_29_shape": [
+      2,
+      1802
+    ],
+    "case_661_shape": [
+      2,
+      425
+    ],
+    "case_677_shape": [
+      2,
+      444
+    ],
+    "case_199_shape": [
+      2,
+      400
+    ]
+  },
+  "beast10_preflight": {
+    "beast10_found": "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.10.4",
+    "checked_candidates": [
+      "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.10.0",
+      "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.10.4",
+      "D:\\naturedna\\evoflux-reproduce\\tools\\BEAST v1.10.5",
+      "D:\\tools\\BEASTv1.10.5",
+      "C:\\tools\\BEASTv1.10.5"
+    ]
+  },
+  "status": {
+    "sbs1_proxy_filtering_done": false,
+    "beast10_xml_built": true,
+    "beast10_run_done": true,
+    "beast10_run_attempted": true
+  },
+  "sbs1_feasibility": {
+    "supplementary_table_15_has_trinucleotide_columns": false,
+    "sbs1_filtering_feasible_from_moesm3_alone": false,
+    "note": "SBS1 (clock-like) filtering typically uses reference-genome trinucleotide context and/or signature assignment (e.g. SigProfiler). MOESM3 supplementary_table_15 as shipped here only has REF/ALT/position \u2014 insufficient for strict SBS1 without lifting to hg38 or author-provided signature calls."
+  },
+  "next_required": [
+    "Optional: pass --hg38-fasta to add trinucleotide context; use --filter-cpg-c-to-t for a CpG C>T clock-like subset (not full SigProfiler SBS1).",
+    "Optional: scripts/export_snv_beauti_nexus.py --matrix case_*_binary_matrix.csv --ages-csv ... --out ..._for_beauti.nexus (NEXUS + .tip_ages.tsv for BEAUTi 1.10 import).",
+    "Install BEAST 1.10.x and build XML (e.g. Binary + strict clock + constant coalescent + tip dates) in Beauti or a validated template.",
+    "Run MCMC and assess ESS in Tracer."
+  ],
+  "beast10_runtime_note": "Final runnable closure uses BEAST 1.10 treeDataLikelihood with proxy mapping of binary states (0/1 -> A/C) in Java mode; this avoids the environment-specific GeneralBeagleImpl exception seen with direct binary TreeLikelihood."
+}

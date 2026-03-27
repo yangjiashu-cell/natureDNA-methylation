@@ -1,0 +1,22 @@
+Nature 2025 EVOFLUx paper — phylogeny / PISCA code provenance
+==============================================================
+
+Checked author repositories:
+
+  * https://github.com/CalumGabbutt/evoflux — Python package for EVOFLUx Bayesian inference
+    (dynesty, etc.). README documents run_inference.sh and notebooks. There is no PISCA,
+    BEAST, or Stan script for discretising fCpGs or building methylation phylogenies.
+
+  * https://github.com/Duran-FerrerM/evoflux — related fork; same scope (inference), not BEAST.
+
+Therefore the Fig.4 methylation pipeline in this reproduction project follows:
+
+  * Methods text in the paper (Stan Beta mixture → 3 states; BEAST + PISCA; priors; chain length).
+  * PISCA package examples (tools/PISCAv1.1/examples/biallelicBinary4Params.xml) with BEAST 1.8.4 + PISCA plugin.
+
+Orchestration scripts added here:
+
+  * scripts/run_fig4_pisca_paper_methods_pipeline.py — Stan CSV → external XML (--discretize external).
+  * scripts/reproduce_pisca_zenodo_fig4.py — Zenodo beta_fcpgs.csv + QC_2204_metadata.csv.
+
+No substitute results are generated: CmdStan and BEAST must succeed locally for real outputs.
